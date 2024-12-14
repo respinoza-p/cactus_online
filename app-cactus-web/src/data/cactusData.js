@@ -1,20 +1,145 @@
 // src/data/cactusData.js
 const cactusData = [
-    {
-      id: 1,
-      name: "Cactus San Pedro",
-      price: 12.99,
-      image: "/images/cactus1.jpg",
-      description: "Un cactus robusto y fácil de cuidar."
-    },
-    {
-      id: 2,
-      name: "Cactus Peyote",
-      price: 15.99,
-      image: "/images/cactus2.jpg",
-      description: "Una especie rara y muy buscada."
-    },
-    // Agrega 18 cactus más...
-  ];
-  
-  export default cactusData;
+  {
+    id: 1,
+    name: "Cactus San Pedro",
+    price: 12.99,
+    image: "/catalogo/san_pedro.jpg",
+    description: "Un cactus robusto y fácil de cuidar.",
+  },
+  {
+    id: 2,
+    name: "Cactus Peyote",
+    price: 15.99,
+    image: "/catalogo/peyote.jpg",
+    description: "Una especie rara y muy buscada.",
+  },
+  {
+    id: 3,
+    name: "Cactus Echinopsis",
+    price: 9.99,
+    image: "/catalogo/echinopsis.jpg",
+    description: "Produce hermosas flores grandes.",
+  },
+  {
+    id: 4,
+    name: "Cactus Mammillaria",
+    price: 8.99,
+    image: "/catalogo/mammillaria.jpg",
+    description: "De tamaño pequeño y fácil de mantener.",
+  },
+  {
+    id: 5,
+    name: "Cactus Astrophytum",
+    price: 14.99,
+    image: "/catalogo/astrophytum.jpg",
+    description: "Con una forma única y estrellas en su piel.",
+  },
+  {
+    id: 6,
+    name: "Cactus Ferocactus",
+    price: 11.99,
+    image: "/catalogo/ferocactus.jpg",
+    description: "Con espinas gruesas y forma esférica.",
+  },
+  {
+    id: 7,
+    name: "Cactus Opuntia",
+    price: 13.99,
+    image: "/catalogo/opuntia.jpg",
+    description: "También conocido como nopal, ideal para exteriores.",
+  },
+  {
+    id: 8,
+    name: "Cactus Cereus",
+    price: 10.99,
+    image: "/catalogo/cereus.jpg",
+    description: "Puede crecer hasta varios metros de altura.",
+  },
+  {
+    id: 9,
+    name: "Cactus Rebutia",
+    price: 7.99,
+    image: "/catalogo/rebutia.jpg",
+    description: "Fácil de cultivar y muy decorativo.",
+  },
+  {
+    id: 10,
+    name: "Cactus Gymnocalycium",
+    price: 13.49,
+    image: "/catalogo/gymnocalycium.jpg",
+    description: "Produce flores brillantes y atractivas.",
+  },
+  {
+    id: 11,
+    name: "Cactus Parodia",
+    price: 10.49,
+    image: "/catalogo/parodia.jpg",
+    description: "Con espinas suaves y flores llamativas.",
+  },
+  {
+    id: 12,
+    name: "Cactus Espina de Pescado",
+    price: 16.99,
+    image: "/catalogo/espina_de_pescado.jpg",
+    description: "Con forma de espina y muy resistente.",
+  },
+  {
+    id: 13,
+    name: "Cactus Notocactus",
+    price: 9.49,
+    image: "/catalogo/notocactus.jpg",
+    description: "Con flores amarillas y espinas suaves.",
+  },
+  {
+    id: 14,
+    name: "Cactus Stenocactus",
+    price: 11.99,
+    image: "/catalogo/stenocactus.jpg",
+    description: "De costillas onduladas y espinas finas.",
+  },
+  {
+    id: 15,
+    name: "Cactus Aporocactus",
+    price: 14.99,
+    image: "/catalogo/aporocactus.jpg",
+    description: "Ideal para macetas colgantes.",
+  },
+  {
+    id: 16,
+    name: "Cactus Cholla",
+    price: 12.99,
+    image: "/catalogo/cholla.jpg",
+    description: "Con espinas largas y muy resistentes.",
+  },
+  {
+    id: 17,
+    name: "Cactus Saguaro",
+    price: 19.99,
+    image: "/catalogo/saguaro.jpg",
+    description: "Famoso por su gran tamaño y forma icónica.",
+  },
+  {
+    id: 18,
+    name: "Cactus Echinocactus",
+    price: 18.49,
+    image: "/catalogo/echinocactus.jpg",
+    description: "Con forma de barril y espinas gruesas.",
+  },
+  {
+    id: 19,
+    name: "Cactus Pereskia",
+    price: 8.99,
+    image: "/catalogo/pereskia.jpg",
+    description: "Una especie poco común y resistente.",
+  },
+  {
+    id: 20,
+    name: "Cactus Lophophora",
+    price: 17.99,
+    image: "/catalogo/lophophora.jpg",
+    description: "Muy codiciado por su rareza y belleza.",
+  },
+];
+
+export default cactusData;
