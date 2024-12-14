@@ -18,22 +18,29 @@ html, body {
   min-height: 100vh;
 }
 
+/* Centrado del Contenido Principal */
 main {
   flex: 1;
+  display: flex;
+  justify-content: center;  /* Centrado horizontal */
 }
 
+/* Footer Fijo */
 .footer {
   position: relative;
   bottom: 0;
   width: 100%;
 }
 
+/* Contenedor de Formularios */
 .login-container {
   width: 45rem;
+  max-width: 90%;            /* Responsivo en pantallas pequeñas */
   padding: 2rem;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .login-container h2 {
