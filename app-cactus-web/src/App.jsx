@@ -9,6 +9,9 @@ import Footer from "./components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
+// Cargar el client-id desde .env
+const paypalClientId = import.meta.env.VITE_PAYPAL_CLIENT_ID;
+
 function App() {
   useEffect(() => {
     document.title = "Cactus Online";
@@ -16,7 +19,7 @@ function App() {
 
   return (
     <CartProvider>
-      <PayPalScriptProvider options={{ "client-id": "ATbZwPJBNIuILwyhwycw35kHGdU3Zs6KhutLSaWOLNc6aai3bGe61ieG-kR7VD7tSJ1KxwOoijBu7uxV" }}>
+      <PayPalScriptProvider options={{ "client-id": paypalClientId }}>
         <Router>
           <Header />
           <main className="container py-4">
