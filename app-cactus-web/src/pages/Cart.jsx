@@ -1,24 +1,48 @@
-import React, { useContext, useState } from "react";
+// src/pages/Cart.jsx
+import React, { useContext, useEffect, useState } from "react";
 import { CartContext } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../utils/auth";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
 const Cart = () => {
   const { state, dispatch } = useContext(CartContext);
   const { cart } = state;
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
+
+  // Redirigir si no está autenticado
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   // Calcular el total
   const totalAmount = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.precio * item.quantity,
     0
   );
 
-  // Eliminar un producto
+  // Manejar eliminación de un producto
   const handleRemove = (id) => {
-    dispatch({ type: "REMOVE_FROM_CART", payload: { id } });
+    dispatch({
+      type: "REMOVE_FROM_CART",
+      payload: { _id: id },
+    });
   };
 
-  // Manejar transacción exitosa
+  // Manejar cambio de cantidad
+  const handleQuantityChange = (id, quantity) => {
+    if (quantity < 1) return; // Evitar valores negativos
+
+    dispatch({
+      type: "UPDATE_QUANTITY",
+      payload: { _id: id, quantity: parseInt(quantity) },
+    });
+  };
+
+  // Manejar aprobación de la compra
   const handleApprove = (details) => {
     setSuccess(true);
     console.log("Compra exitosa:", details);
@@ -35,14 +59,23 @@ const Cart = () => {
             {cart.map((item) => (
               <li
                 className="list-group-item d-flex justify-content-between align-items-center"
-                key={item.id}
+                key={item._id}
               >
                 <span>
-                  {item.name} - ${item.price} x {item.quantity}
+                  {item.nombre} - ${item.precio} x{" "}
+                  <input
+                    type="number"
+                    min="1"
+                    value={item.quantity}
+                    className="form-control d-inline w-auto"
+                    onChange={(e) =>
+                      handleQuantityChange(item._id, e.target.value)
+                    }
+                  />
                 </span>
                 <button
                   className="btn btn-danger"
-                  onClick={() => handleRemove(item.id)}
+                  onClick={() => handleRemove(item._id)}
                 >
                   Eliminar
                 </button>
@@ -53,9 +86,7 @@ const Cart = () => {
           <h4 className="mb-3">Total: ${totalAmount.toFixed(2)}</h4>
 
           {success ? (
-            <div className="alert alert-success">
-              ¡Compra realizada con éxito!
-            </div>
+            <div className="alert alert-success">¡Compra realizada con éxito!</div>
           ) : (
             <PayPalButtons
               createOrder={(data, actions) => {

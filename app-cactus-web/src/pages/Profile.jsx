@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+// src/pages/Profile.jsx
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../utils/auth";
 
-const API_REGISTER_URL = import.meta.env.VITE_API_REGISTER_URL;
+const API_PROFILE_URL = import.meta.env.VITE_API_REGISTER_URL;
 
-const Register = () => {
+const Profile = () => {
   const [formData, setFormData] = useState({
+    id: "",
     nombre: "",
     email: "",
-    password: "",
     direccion: "",
     pais: "Chile",
     region: "",
@@ -18,6 +20,45 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+
+  // Redirigir si no está autenticado
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  // Obtener datos del usuario autenticado
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+
+        const response = await axios.get(`${API_PROFILE_URL}/me`, {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        // Asegurarse de configurar correctamente el ID
+        setFormData({
+          id: response.data._id, // Establecer el ID del usuario
+          nombre: response.data.nombre,
+          email: response.data.email,
+          direccion: response.data.direccion,
+          pais: response.data.pais,
+          region: response.data.region,
+          comuna: response.data.comuna,
+        });
+      } catch (err) {
+        console.error("Error al cargar datos:", err);
+        navigate("/login");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   // Manejar cambios en los campos
   const handleInputChange = (e) => {
@@ -32,18 +73,30 @@ const Register = () => {
     setSuccess(false);
 
     try {
-      const response = await axios.post(API_REGISTER_URL, formData, {
-        headers: {
-          "Content-Type": "application/json",
+      const token = localStorage.getItem("authToken");
+
+      await axios.put(
+        `${API_PROFILE_URL}/${formData.id}`, // Usar el ID correcto
+        {
+          nombre: formData.nombre,
+          direccion: formData.direccion,
+          pais: formData.pais,
+          region: formData.region,
+          comuna: formData.comuna,
         },
-      });
+        {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       setSuccess(true);
-      alert("Registro exitoso!");
-      navigate("/login"); // Redirigir después del registro
+      alert("Datos actualizados con éxito.");
     } catch (err) {
       setError(
-        err.response?.data?.message || "Error al registrar. Intenta nuevamente."
+        err.response?.data?.message || "Error al actualizar los datos."
       );
       console.error("Error:", err.response?.data || err);
     }
@@ -51,9 +104,8 @@ const Register = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Crear Cuenta</h2>
+      <h2>Editar Perfil</h2>
       <form onSubmit={handleSubmit}>
-        {/* Nombre */}
         <div className="mb-3">
           <label className="form-label">Nombre Completo</label>
           <input
@@ -67,35 +119,18 @@ const Register = () => {
           />
         </div>
 
-        {/* Email */}
         <div className="mb-3">
           <label className="form-label">Correo Electrónico</label>
           <input
             type="email"
             name="email"
             className="form-control"
-            placeholder="Ingresa tu correo"
             required
             value={formData.email}
-            onChange={handleInputChange}
+            readOnly
           />
         </div>
 
-        {/* Contraseña */}
-        <div className="mb-3">
-          <label className="form-label">Contraseña</label>
-          <input
-            type="password"
-            name="password"
-            className="form-control"
-            placeholder="Ingresa tu contraseña"
-            required
-            value={formData.password}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        {/* Dirección */}
         <div className="mb-3">
           <label className="form-label">Dirección</label>
           <input
@@ -109,7 +144,6 @@ const Register = () => {
           />
         </div>
 
-        {/* País */}
         <div className="mb-3">
           <label className="form-label">País</label>
           <select
@@ -124,7 +158,6 @@ const Register = () => {
           </select>
         </div>
 
-        {/* Región */}
         <div className="mb-3">
           <label className="form-label">Región</label>
           <input
@@ -138,7 +171,6 @@ const Register = () => {
           />
         </div>
 
-        {/* Comuna */}
         <div className="mb-3">
           <label className="form-label">Comuna</label>
           <input
@@ -152,26 +184,24 @@ const Register = () => {
           />
         </div>
 
-        {/* Mensaje de Error */}
         {error && (
           <div className="alert alert-danger" role="alert">
             {error}
           </div>
         )}
 
-        {/* Mensaje de Éxito */}
         {success && (
           <div className="alert alert-success" role="alert">
-            ¡Registro exitoso! Redirigiendo...
+            ¡Datos actualizados con éxito!
           </div>
         )}
 
         <button type="submit" className="btn btn-success">
-          Registrarse
+          Guardar Cambios
         </button>
       </form>
     </div>
   );
 };
 
-export default Register;
+export default Profile;

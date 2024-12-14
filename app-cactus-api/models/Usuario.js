@@ -45,13 +45,8 @@ const usuarioSchema = new mongoose.Schema(
     region: {
       type: String,
       required: [true, "La región es obligatoria"],
-      enum: [
-        "Región Metropolitana",
-        "Valparaíso",
-        "Biobío",
-        "Araucanía",
-        "Atacama",
-      ],
+      minlength: [3, "La región debe tener al menos 3 caracteres"],
+      maxlength: [50, "La región no puede exceder los 50 caracteres"],
     },
 
     // Comuna

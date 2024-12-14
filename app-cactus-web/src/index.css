@@ -27,3 +27,26 @@ main {
   bottom: 0;
   width: 100%;
 }
+
+.login-container {
+  width: 45rem;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.login-container .btn {
+  width: 100%;
+}
+
+.alert {
+  font-size: 0.9rem;
+}

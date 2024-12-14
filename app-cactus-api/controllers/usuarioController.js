@@ -70,33 +70,36 @@ exports.deleteUsuario = async (req, res) => {
 
 // Obtener un usuario por email y verificar la contraseña
 exports.getUsuarioByEmailAndPassword = async (req, res) => {
-    try {
-      const { email, password } = req.body;
-  
-      // Verificar si el usuario existe
-      const usuario = await Usuario.findOne({ email });
-      if (!usuario) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
-      }
-  
-      // Comparar la contraseña
-      const isMatch = await bcryptjs.compare(password, usuario.password);
-      if (!isMatch) {
-        return res.status(401).json({ message: "Contraseña incorrecta" });
-      }
-    
-    //Se firma el TOKEN y se asigna un tiempo
-    const token = jwt.sign({ email, password }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+  try {
+    const { email, password } = req.body;
 
-    //Regresa el token
-    res.json({ token });    
-
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+    // Verificar si el usuario existe
+    const usuario = await Usuario.findOne({ email });
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
-  };
+
+    // Comparar la contraseña
+    const isMatch = await bcryptjs.compare(password, usuario.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Contraseña incorrecta" });
+    }
+
+    // Firmar el token con el ID del usuario
+    const token = jwt.sign(
+      { id: usuario._id, email: usuario.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    // Responder con el token
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
   //Verificar si el token de la sesión es válido
   exports.verifyToken = (req, res) => {
@@ -123,3 +126,29 @@ exports.getUsuarioByEmailAndPassword = async (req, res) => {
       res.status(500).json({ message: "Error al procesar el token" });
     }
   };
+
+// Obtener datos del usuario autenticado
+exports.getUsuarioById = async (req, res) => {
+  try {
+    // Extraer token del encabezado Authorization
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ message: "Token no proporcionado o inválido" });
+    }
+
+    // Extraer y verificar token
+    const token = authHeader;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Buscar usuario en la base de datos por ID desde el token decodificado
+    const usuario = await Usuario.findById(decoded.id).select("-password");
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Responder con datos del usuario
+    res.status(200).json(usuario);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener los datos del usuario" });
+  }
+};

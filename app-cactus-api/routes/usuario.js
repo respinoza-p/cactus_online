@@ -168,4 +168,22 @@ router.put("/:id", validateJWT, usuarioController.updateUsuario);
  */
 router.delete("/:id", validateJWT, usuarioController.deleteUsuario);
 
+/**
+ * @swagger
+ * /usuarios/me:
+ *   get:
+ *     summary: Obtener datos del usuario autenticado
+ *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Datos del usuario autenticado
+ *       401:
+ *         description: Token no proporcionado o inválido
+ *       500:
+ *         description: Error en el servidor
+ */
+router.get("/me", validateJWT,usuarioController.getUsuarioById);
+
 module.exports = router;

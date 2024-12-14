@@ -6,18 +6,21 @@ const ProductCard = ({ cactus }) => {
   const { dispatch } = useContext(CartContext);
 
   const handleAddToCart = () => {
-    dispatch({ type: "ADD_TO_CART", payload: cactus });
-    alert(`${cactus.name} añadido al carrito!`);
+    dispatch({
+      type: "ADD_TO_CART",
+      payload: cactus, // Enviar datos del producto
+    });
+    alert(`${cactus.nombre} añadido al carrito!`);
   };
 
   return (
     <div className="card" style={{ width: "18rem" }}>
-      <img src={cactus.image} className="card-img-top" alt={cactus.name} />
+      <img src={cactus.imagen} className="card-img-top" alt={cactus.nombre} />
       <div className="card-body">
-        <h5 className="card-title">{cactus.name}</h5>
-        <p className="card-text">{cactus.description}</p>
+        <h5 className="card-title">{cactus.nombre}</h5>
+        <p className="card-text">{cactus.descripcion}</p>
         <p className="card-text">
-          <strong>${cactus.price}</strong>
+          <strong>${cactus.precio}</strong>
         </p>
         <button className="btn btn-success" onClick={handleAddToCart}>
           Agregar al Carrito

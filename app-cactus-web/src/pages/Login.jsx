@@ -1,35 +1,49 @@
 // src/pages/Login.jsx
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const API_LOGIN_URL = import.meta.env.VITE_API_LOGIN_URL;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!formData.email || !formData.password) {
-      setError("Por favor, completa todos los campos.");
-      return;
+    setError(""); // Limpiar errores anteriores
+  
+    try {
+      const response = await axios.post(API_LOGIN_URL, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      // Guardar token en LocalStorage
+      localStorage.setItem("authToken", response.data.token);
+  
+      alert("Inicio de sesión exitoso!");
+      navigate("/products"); // Redireccionar después del login
+    } catch (err) {
+      setError("Error en el inicio de sesión. Verifica tus credenciales.");
+      console.error("Error:", err.response?.data || err);
     }
-
-    console.log("Datos de inicio de sesión:", formData);
-    alert("Inicio de sesión exitoso!");
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-50">
-      <div className="card p-4" style={{ width: "24rem" }}>
-        <h2 className="text-center mb-4">Iniciar Sesión</h2>
+    <div className="login-container">
+      <div className="login-form">
+        <h2>Iniciar Sesión</h2>
         <form onSubmit={handleSubmit}>
           {/* Correo Electrónico */}
           <div className="mb-3">
@@ -66,7 +80,7 @@ const Login = () => {
             </div>
           )}
 
-          <button type="submit" className="btn btn-success w-100">
+          <button type="submit" className="btn btn-success">
             Iniciar Sesión
           </button>
         </form>
